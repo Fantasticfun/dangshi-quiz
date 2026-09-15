@@ -1,4 +1,4 @@
-﻿build/
+build/
 pages/
 ocr/
 full-ocr/
@@ -7,3 +7,9 @@ full-bitmap-gray.png
 dump/
 *.pyc
 __pycache__/
+
+# never commit credentials
+.token
+*.token
+deploy-token*
+.env
