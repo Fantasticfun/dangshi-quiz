@@ -1,0 +1,80 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"></head>
+<body><div id="mount"></div><pre id="log"></pre>
+<script>
+var LOG=[];
+function log(s){LOG.push(s);document.getElementById('log').textContent=LOG.join('\n');}
+window.onerror=function(m,u,l,c){log('JSERROR: '+m+' @'+l+':'+c);};
+window.addEventListener('unhandledrejection',function(e){log('REJECT: '+e.reason);});
+fetch('index.html').then(function(r){return r.text();}).then(function(h){
+  document.getElementById('mount').innerHTML=h;
+  return ['questions.js','app.js'].reduce(function(p,s){
+    return p.then(function(){return new Promise(function(res){
+      var e=document.createElement('script');e.src=s;e.onload=res;
+      e.onerror=function(){log('SCRIPT FAIL '+s);res();};document.body.appendChild(e);});});
+  },Promise.resolve());
+}).then(function(){setTimeout(main,300);});
+
+function q(s){return document.querySelector(s);}
+function qa(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
+function state(tag){
+  var stem=q('.q-stem');
+  log('['+tag+'] '+q('#quizCounter').textContent
+     +' | '+(q('.q-type')?q('.q-type').textContent:'-')
+     +' | '+(stem?stem.textContent.slice(0,20):'-')
+     +' | verdict='+(q('.verdict')?q('.verdict').textContent.slice(0,8):'-')
+     +' | submit='+(q('#btnSubmitMulti')?'Y':'N')
+     +' | judge='+qa('.judge-opts .opt').length
+     +' | selfgrade='+qa('.self-grade .btn').length
+     +' | next='+q('#btnNext').textContent);
+}
+function main(){
+ try{
+  qa('.unit .btn-primary')[0].click();            // unit 1.2 -> 4 questions
+  state('start');
+  qa('.opts .opt')[1].click();                    // q1 single -> B (self-grade UI)
+  state('q1 picked');
+  qa('.self-grade .btn')[0].click();              // mark correct
+  state('q1 graded');
+  log('stats='+localStorage.getItem('dsq_stats_v1'));
+  q('#btnNext').click(); state('next->2');
+
+  var o=qa('.opts .opt'); o[0].click();o[1].click();o[2].click();o[3].click();
+  state('q2 picked');
+  q('#btnSubmitMulti').click(); state('q2 submitted');
+
+  q('#btnNext').click(); state('next->3');
+  var jb=qa('.judge-opts .opt');
+  if(jb.length){ jb[0].click(); state('q3 picked');
+    var sg=qa('.self-grade .btn');
+    if(sg.length){ sg[1].click(); state('q3 marked WRONG'); } }
+
+  q('#btnNext').click(); state('next->4');
+  var o4=qa('.opts .opt'); if(o4.length){ o4[2].click(); state('q4 picked'); }
+  var sg4=qa('.self-grade .btn'); if(sg4.length){ sg4[0].click(); state('q4 graded'); }
+
+  log('statsFINAL='+localStorage.getItem('dsq_stats_v1'));
+  log('wrongBadge='+q('#wrongBadge').textContent+' hidden='+q('#wrongBadge').classList.contains('hidden'));
+
+  q('#btnNext').click();
+  log('after finish -> home visible='+!q('#view-home').classList.contains('hidden'));
+  log('hero pills='+qa('.stat-pill').map(function(p){return p.textContent;}).join(' / '));
+  log('unit rows: '+qa('.unit').length+' chapter rows: '+qa('.chapter').length);
+  var um=qa('.unit .unit-meta').map(function(m){return m.textContent;});
+  log('unit meta: '+um.join(' || '));
+
+  // wrong book + stats + search
+  q('#btnWrong').click();
+  log('wrongbook rows='+qa('#statsBody tbody tr').length+' title='+(q('#statsBody .page-title')?q('#statsBody .page-title').textContent:'-'));
+  q('#btnStats').click();
+  log('stat cards='+qa('.stat-card').map(function(c){return c.textContent;}).join(' / '));
+  log('chapter table rows='+qa('#statsBody tbody tr').length);
+  q('#btnHome').click();
+  q('#searchInput').value='主力';
+  q('#searchInput').dispatchEvent(new Event('input'));
+  setTimeout(function(){
+    log('search hits='+qa('.res-item').length);
+    log('DONE');
+  },500);
+ }catch(e){ log('EXCEPTION: '+e.message+' | '+e.stack); log('DONE'); }
+}
+</script></body></html>

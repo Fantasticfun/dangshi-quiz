@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#a4232b">
+<title>党史题库 · 刷题练习</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚩</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <button id="btnHome" class="brand" title="返回首页">
+      <span class="flag">🚩</span>
+      <span class="brand-text">
+        <strong>党史题库</strong>
+        <small>刷题练习 · 学习记录</small>
+      </span>
+    </button>
+    <nav class="topnav">
+      <button id="btnStats" class="nav-btn">学习统计</button>
+      <button id="btnWrong" class="nav-btn">错题本<span id="wrongBadge" class="badge hidden">0</span></button>
+      <button id="btnTheme" class="nav-btn icon-btn" title="切换主题">🌓</button>
+    </nav>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- ============ HOME ============ -->
+  <section id="view-home" class="view">
+    <div class="hero">
+      <h1>党史题库 · 刷题练习</h1>
+      <p class="hero-sub">按单元自选刷题，自动记录每道题的正确与错误次数</p>
+      <div class="hero-stats" id="heroStats"></div>
+      <div class="hero-actions">
+        <button id="btnQuick" class="btn btn-primary">开始随机练习</button>
+        <button id="btnWrongHero" class="btn">打开错题本</button>
+      </div>
+      <p class="hint" id="dataHint"></p>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <input id="searchInput" type="search" placeholder="搜索题目关键词…" autocomplete="off">
+      </div>
+      <label class="chk"><input type="checkbox" id="onlyWrongFilter"> 只看做错过</label>
+      <label class="chk"><input type="checkbox" id="onlyUnseenFilter"> 只看没做过</label>
+      <button id="btnExpandAll" class="btn btn-sm">全部展开</button>
+      <button id="btnCollapseAll" class="btn btn-sm">全部收起</button>
+    </div>
+
+    <div id="unitTree" class="unit-tree"></div>
+    <div id="searchResults" class="search-results hidden"></div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="view-quiz" class="view hidden">
+    <div class="quiz-head">
+      <button id="btnQuit" class="btn btn-sm">← 退出</button>
+      <div class="quiz-title" id="quizTitle"></div>
+      <div class="quiz-head-right">
+        <span class="counter" id="quizCounter"></span>
+      </div>
+    </div>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div class="quiz-body">
+      <div class="q-card" id="qCard"></div>
+      <div class="q-result" id="qResult"></div>
+    </div>
+
+    <div class="quiz-foot">
+      <button id="btnPrev" class="btn">上一题</button>
+      <button id="btnReveal" class="btn">查看答案</button>
+      <button id="btnNext" class="btn btn-primary">下一题</button>
+    </div>
+    <p class="kbd-hint">快捷键：<kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd> 选择 · <kbd>Enter</kbd> 下一题 · <kbd>1</kbd>/<kbd>2</kbd> 判断题</p>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section id="view-stats" class="view hidden">
+    <h2 class="page-title">学习统计</h2>
+    <div id="statsBody"></div>
+    <div class="danger-zone">
+      <button id="btnResetStats" class="btn btn-danger">清空全部做题记录</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <span id="footNote">题库内容来自《党史题库》PDF，经 OCR 提取整理。</span>
+</footer>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

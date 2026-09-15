@@ -1,0 +1,9 @@
+﻿build/
+pages/
+ocr/
+full-ocr/
+full-bitmap.png
+full-bitmap-gray.png
+dump/
+*.pyc
+__pycache__/
