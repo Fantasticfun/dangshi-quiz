@@ -1,4 +1,4 @@
-/* ================= 党史题库 · 样式 ================= */
+﻿/* ================= 党史题库 · 样式 ================= */
 :root {
   --red: #a4232b;
   --red-dark: #7d161d;
@@ -240,6 +240,7 @@ mark { background: var(--gold); color: #2b2100; padding: 0 2px; border-radius: 3
 .verdict.info { background: var(--red-soft); color: var(--text); border: 1px solid var(--line); }
 .verdict strong { font-weight: 700; }
 .answer-line { margin-top: 8px; font-size: 14px; color: var(--text); }
+.src-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
 .self-grade { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
 .self-grade span { font-size: 13px; color: var(--muted); }
 

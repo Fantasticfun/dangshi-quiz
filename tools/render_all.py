@@ -5,7 +5,7 @@ import cv2
 import pdfplumber
 
 PDF = r"C:\Users\13083\Desktop\党史题库(2).pdf"
-OUT = r"C:\Users\13083\Desktop\dangshi-quiz\pages"
+OUT = r"C:\Users\13083\Desktop\dangshi-quiz\build\pages"
 os.makedirs(OUT, exist_ok=True)
 
 DPI = 150  # native bitmap is ~105 dpi; 150 gives a modest supersample before the 2x OCR upscale

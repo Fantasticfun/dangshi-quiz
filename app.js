@@ -15,7 +15,8 @@
       type: q.t,                 // single | multi | judge
       stem: q.q,
       options: q.o || null,      // array for single/multi, null for judge
-      answer: q.a || ''          // '' when the source PDF carried no answer key
+      answer: q.a || '',         // '' when no answer is available
+      answerFrom: q.ak || 'pdf'  // 'pdf' 原件自带答案 | 'kb' 依据党史知识补录
     };
   });
 
@@ -173,9 +174,11 @@
     });
 
     var answered = QUESTIONS.filter(function (q) { return q.answer; }).length;
+    var fromKb = QUESTIONS.filter(function (q) { return q.answer && q.answerFrom === 'kb'; }).length;
     $('#dataHint').textContent =
-      '共 ' + QUESTIONS.length + ' 道题 · ' + UNITS.length + ' 个单元 · 其中 ' + answered +
-      ' 道多选题在原始 PDF 中带有答案，可自动判分；其余题目请作答后对照解析自评。';
+      '共 ' + QUESTIONS.length + ' 道题 · ' + UNITS.length + ' 个单元 · ' +
+      answered + ' 道题已配答案可自动判分（其中 ' + fromKb + ' 道为依据党史知识补录）' +
+      (answered < QUESTIONS.length ? '，其余题目请作答后对照资料自评。' : '。');
 
     renderTree('');
     $('#searchResults').classList.add('hidden');
@@ -478,6 +481,12 @@
         '题库答案：<strong>' + esc(q.answer) + '</strong>';
       box.appendChild(line);
 
+      if (q.answerFrom === 'kb') {
+        var src = el('div', 'answer-line src-note');
+        src.textContent = '说明：原题库文件未记录本题答案，此处答案依据中共党史知识补录，请以教材为准。';
+        box.appendChild(src);
+      }
+
       if (!ok && q.options) {
         var exp = el('div', 'answer-line');
         var parts = q.answer.split('').map(function (L) {
@@ -489,7 +498,7 @@
       }
     } else {
       var v2 = el('div', 'verdict info');
-      v2.innerHTML = '原始 PDF 未收录本题答案。请对照资料判断，然后如实记录结果 —— 记录会累计到统计与错题本。';
+      v2.innerHTML = '本题暂无答案（原件未记录，且未能可靠补录）。请对照教材判断，然后如实记录结果 —— 记录会累计到统计与错题本。';
       box.appendChild(v2);
 
       var line2 = el('div', 'answer-line');

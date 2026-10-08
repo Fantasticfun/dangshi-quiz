@@ -5,8 +5,8 @@ import cv2
 from rapidocr_onnxruntime import RapidOCR
 from concurrent.futures import ThreadPoolExecutor
 
-PAGES = r"C:\Users\13083\Desktop\dangshi-quiz\pages"
-OUT = r"C:\Users\13083\Desktop\dangshi-quiz\ocr"
+PAGES = r"C:\Users\13083\Desktop\dangshi-quiz\build\pages"
+OUT = r"C:\Users\13083\Desktop\dangshi-quiz\build\ocr"
 os.makedirs(OUT, exist_ok=True)
 
 SCALE = 2
